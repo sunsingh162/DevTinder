@@ -6,3 +6,12 @@
 - What are dependacies?
 - What is use of "-g" while npm install?
 - Difference between caret and tilde(^ vs ~)
+
+- Write login to handle GET,POST,PATCH,DELETE API call and test them on Postman
+- Explore routing and use of ?,+,(),* in the routes
+- Use of regex in routes /a/     /.*fly$/
+- Reading query and params in routes
+- Reading dynamic routes
+- Multiple route Handlers
+- next()
+- next function and errors along with res.send()
