@@ -1,0 +1,8 @@
+- Install express
+- Create a server
+- Listen to port 3000
+- Write request handlers for /test, /
+- Install nodemon and update scripts inside package.json
+- What are dependacies?
+- What is use of "-g" while npm install?
+- Difference between caret and tilde(^ vs ~)
