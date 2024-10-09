@@ -15,3 +15,7 @@
 - Multiple route Handlers
 - next()
 - next function and errors along with res.send()
+- What is Middleware? Why do we need it?
+- How express js basically handles req behind the scenes
+- Differnce between app.use() vs app.all()
+- Write dummy auth middle for all routes except /user/login
