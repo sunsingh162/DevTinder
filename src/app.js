@@ -1,25 +1,32 @@
 const express = require("express");
 
 const app = express();
-const { userAuth, adminAuth } = require("./middlewares/auth");
 
-app.get("/user", userAuth);
-
-app.get("/admin", adminAuth, (req, res) => {
-  res.send("Admin data sent");
-});
-app.get("/user/data", (req, res) => {
-  res.send("Data sent");
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    // Log your error
+    res.status(500).send("something went wrong");
+  }
 });
 
-//Way to gracefully handle errors
-app.use("/", (err,req,res,next) => {
-    try{
-        //write ur logic
-    } catch(err){
-        res.status(500).send("Something went wrong")
-    }
-})
+app.get("/getUserData", (req, res) => {
+  //try {
+  // Logic of DB call and get user data
+  throw new Error("dvbzhjf");
+  res.send("User Data Sent");
+  //   } catch (err) {
+  //     res.status(500).send("Some Error contact support team");
+  //   }
+});
+
+//Always use app.use() in last so that if everything fails this will throw error
+app.use("/", (err, req, res, next) => {
+  if (err) {
+    // Log your error
+    res.status(500).send("something went wrong");
+  }
+});
+
 
 app.listen(3000, () => {
   console.log("Server is successfully listening to port 3000");
