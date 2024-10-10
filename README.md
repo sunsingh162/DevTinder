@@ -19,3 +19,11 @@
 - How express js basically handles req behind the scenes
 - Differnce between app.use() vs app.all()
 - Write dummy auth middle for all routes except /user/login
+- Error handling with middleware
+
+- Create cluster on mongoDB
+- Connect application to database using <connection URL/devTinder>
+- Connect DB before starting server
+- Create a userSchema & userModel
+- Add express.json middleware to your app
+- Make signup API dynamic to recieve data from end user
