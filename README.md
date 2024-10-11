@@ -32,3 +32,5 @@
 - API - get user by id
 - create delete user API
 - Update the user API- patch
+
+- Explore Schema type option from documentation (required,unique,minLength,trim,validate,timeStamps)

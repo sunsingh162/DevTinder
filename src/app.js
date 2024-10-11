@@ -59,12 +59,13 @@ app.patch("/user", async(req,res) => {
     const data = req.body
     try{
        const user= await userModel.findByIdAndUpdate(userId, data, {
-            returnDocument: "before"
+            returnDocument: "before",
+            runValidators: true
         })
         console.log(user);
         res.send("user udpated successfully")
     }catch(err){
-        res.status(400).send('Something went wrong')
+        res.status(400).send('Something went wrong:' + err.message)
     }
 })
 
