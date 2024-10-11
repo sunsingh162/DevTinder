@@ -27,3 +27,8 @@
 - Create a userSchema & userModel
 - Add express.json middleware to your app
 - Make signup API dynamic to recieve data from end user
+- User.findOne with duplicate emailId
+- API - get user by email
+- API - get user by id
+- create delete user API
+- Update the user API- patch
