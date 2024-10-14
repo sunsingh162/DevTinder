@@ -34,3 +34,10 @@
 - Update the user API- patch
 
 - Explore Schema type option from documentation (required,unique,minLength,trim,validate,timeStamps)
+- API level data sanitization
+- Install validation library and explore its function for password,email,photoUrl etc validation
+
+- Validate data in Signup API
+- Install bcrypt package
+- Create passwordHash using bcrypt.hash & save user encrypted password to DB
+- Create Login API & compare password with the DB and then allow user to login, else throw error
