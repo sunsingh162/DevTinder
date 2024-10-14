@@ -7,12 +7,13 @@ const userModel = require("./models/user");
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
-  const user = new userModel(req.body);
   try {
+    const user = new userModel(req.body);
+
     await user.save();
     res.send("user added successfully");
   } catch (err) {
-    res.status(400).send("Got error " + err.message);
+    res.status(400).send("ERROR : " + err.message);
   }
 });
 
@@ -32,42 +33,60 @@ app.get("/user", async (req, res) => {
 });
 
 //Feed API- get all users from database
-app.get("/feed", async(req,res) => {
-    try {
-        const users = await userModel.find({})
-        res.send(users)
-    } catch(err){
-        res.status(400).send('Something went wrong')
-    }
-})
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await userModel.find({});
+    res.send(users);
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
 
 //delete User data
-app.delete("/user", async(req,res) => {
-    const userId = req.body.userId
-    try{
-        await userModel.findByIdAndDelete({_id: userId})
-        // await userModel.findByIdAndDelete(userId)   // also can write like this
-        res.send('user deleted successfully')
-    }catch(err){
-        res.status(400).send('Something went wrong')
-    }
-})
+app.delete("/user", async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    await userModel.findByIdAndDelete({ _id: userId });
+    // await userModel.findByIdAndDelete(userId)   // also can write like this
+    res.send("user deleted successfully");
+  } catch (err) {
+    res.status(400).send("Something went wrong");
+  }
+});
 
 //Update User data
-app.patch("/user", async(req,res) => {
-    const userId = req.body.userId
-    const data = req.body
-    try{
-       const user= await userModel.findByIdAndUpdate(userId, data, {
-            returnDocument: "before",
-            runValidators: true
-        })
-        console.log(user);
-        res.send("user udpated successfully")
-    }catch(err){
-        res.status(400).send('Something went wrong:' + err.message)
+app.patch("/user/:userId", async (req, res) => {
+  const userId = req.params?.userId;
+  const data = req.body;
+  try {
+    const ALLOWED_UPDATES = [
+      "firstName",
+      "lastName",
+      "password",
+      "age",
+      "photoUrl",
+      "about",
+      "skills",
+    ];
+    const isAllowedUpdates = Object.keys(data).every((field) =>
+      ALLOWED_UPDATES.includes(field)
+    );
+    if (!isAllowedUpdates) {
+      throw new Error("Can't update field");
     }
-})
+    if (data.skills.length > 8) {
+      throw new Error("Cant update the field");
+    }
+    const user = await userModel.findByIdAndUpdate(userId, data, {
+      returnDocument: "before",
+      runValidators: true,
+    });
+    console.log(user);
+    res.send("user udpated successfully");
+  } catch (err) {
+    res.status(400).send("Something went wrong:" + err.message);
+  }
+});
 
 connectDB()
   .then(() => {

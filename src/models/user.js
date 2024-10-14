@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema(
   {
@@ -21,11 +22,21 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minLength: 12,
       maxLength: 30,
+      validate(value) {
+        if(!validator.isEmail(value)){
+            throw new Error("Email id is not valid: " + value)
+        }
+      }
     },
     password: {
       type: String,
       minLength: 8,
       maxLength: 25,
+      validate(value) {
+        if(!validator.isStrongPassword(value)){
+            throw new Error("Your password is not strong: " + value)
+        }
+      }
     },
     age: {
       type: Number,
@@ -43,6 +54,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         "https://kristalle.com/team/david-and-audrey-lloyd/dummy-profile-pic/",
+        validate(value) {
+            if(!validator.isURL(value)){
+                throw new Error("Photo URL is not valid: " + value)
+            }
+          }
     },
     about: {
       type: String,
