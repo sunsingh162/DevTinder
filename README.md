@@ -44,3 +44,5 @@
 
 - Install cookie-parser & jsonwebtokenIn
 - Create a JWT token in login API and then read from profile APi(GET)
+- userAuth Middlewarein profile API and new sendconnectionrequest API
+- Set expiry of JWT token and cookies
