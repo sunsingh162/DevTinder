@@ -41,3 +41,6 @@
 - Install bcrypt package
 - Create passwordHash using bcrypt.hash & save user encrypted password to DB
 - Create Login API & compare password with the DB and then allow user to login, else throw error
+
+- Install cookie-parser & jsonwebtokenIn
+- Create a JWT token in login API and then read from profile APi(GET)

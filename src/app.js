@@ -4,10 +4,12 @@ const app = express();
 
 const userModel = require("./models/user");
 const { validateData } = require("./utils/validation");
+const bcrypt = require("bcrypt");
+const cookiesParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 app.use(express.json());
-
-const bcrypt = require("bcrypt");
+app.use(cookiesParser());
 
 app.post("/signup", async (req, res) => {
   try {
@@ -38,6 +40,7 @@ app.post("/login", async (req, res) => {
     const { emailId, password } = req.body;
 
     const user = await userModel.findOne({ emailId: emailId });
+    const { _id } = user;
 
     if (!user) {
       throw new Error("Invalid credentials");
@@ -46,6 +49,11 @@ app.post("/login", async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (isPasswordValid) {
+      // Create a JWT Token
+      const token = await jwt.sign({ _id }, "DevTinder@6798");
+      // Add the token to cookie and send the response back to the user
+      res.cookie("token", token);
+
       res.send("Login successful");
     } else {
       throw new Error("Invalid Credentials");
@@ -55,11 +63,33 @@ app.post("/login", async (req, res) => {
   }
 });
 
+//Get profile of loggedIn User
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    const { token } = cookies;
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+
+    //Validate my token
+    const decodedMessage = await jwt.verify(token, "DevTinder@6798");
+    const { _id } = decodedMessage;
+    const user = await userModel.findById({ _id });
+    if (!user) {
+      throw new Error("User does not exist");
+    }
+    res.send(`Welcome, ${user.firstName} ${user.lastName}`);
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
+
 //Get User By Email
 app.get("/user", async (req, res) => {
-  const email = req.body.emailId;
   try {
-    const users = await userModel.findOne({ emailId: email });
+    const { emailId } = req.body;
+    const users = await userModel.findOne({ emailId: emailId });
     if (users.length === 0) {
       res.status(400).send("Something went wrong");
     } else {
