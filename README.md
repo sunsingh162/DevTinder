@@ -47,3 +47,7 @@
 - userAuth Middlewarein profile API and new sendconnectionrequest API
 - Set expiry of JWT token and cookies
 - Write all the methods which are close to user in userschema methods for the sake of optimization
+
+- Group multiple api under respective routers
+- Create route folders for managing auth, profile, request headers
+- Create logout, PATCH /profile/edit API, PATCH /profile/password API

@@ -31,31 +31,40 @@ authRouter.post("/signup", async (req, res) => {
 
 //Login User by Email and password
 authRouter.post("/login", async (req, res) => {
-    try {
-      const { emailId, password } = req.body;
-  
-      const user = await userModel.findOne({ emailId: emailId });
-      const { _id } = user;
-  
-      if (!user) {
-        throw new Error("Invalid credentials");
-      }
-  
-      const isPasswordValid = await user.validatePassword(password)
-  
-      if (isPasswordValid) {
-        // Create a JWT Token
-        const token = await user.getJWT();
-        // Add the token to cookie and send the response back to the user
-        res.cookie("token", token, { expires: new Date(Date.now() + 8 * 3600000)});
-  
-        res.send("Login successful");
-      } else {
-        throw new Error("Invalid Credentials");
-      }
-    } catch (err) {
-      res.status(400).send("ERROR : " + err.message);
-    }
-  });
+  try {
+    const { emailId, password } = req.body;
 
-module.exports = authRouter
+    const user = await userModel.findOne({ emailId: emailId });
+    const { _id } = user;
+
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+
+    const isPasswordValid = await user.validatePassword(password);
+
+    if (isPasswordValid) {
+      // Create a JWT Token
+      const token = await user.getJWT();
+      // Add the token to cookie and send the response back to the user
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+
+      res.send("Login successful");
+    } else {
+      throw new Error("Invalid Credentials");
+    }
+  } catch (err) {
+    res.status(400).send("ERROR : " + err.message);
+  }
+});
+
+//Logout user
+authRouter.post("/logout", (req, res) => {
+    //Just make token as null to logout
+  res.cookie("token", null, { expires: new Date(Date.now()) });
+  res.send("Logout Successfully")
+});
+
+module.exports = authRouter;
