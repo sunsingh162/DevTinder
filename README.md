@@ -46,3 +46,4 @@
 - Create a JWT token in login API and then read from profile APi(GET)
 - userAuth Middlewarein profile API and new sendconnectionrequest API
 - Set expiry of JWT token and cookies
+- Write all the methods which are close to user in userschema methods for the sake of optimization
