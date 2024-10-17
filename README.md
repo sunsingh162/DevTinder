@@ -51,3 +51,25 @@
 - Group multiple api under respective routers
 - Create route folders for managing auth, profile, request headers
 - Create logout, PATCH /profile/edit API, PATCH /profile/password API
+
+- Created a connectionReq schema
+- enum properties in schema objects
+- Validation is required:- 
+  - User should only be able to like the connection or dislike it,not accept or reject it from API
+  - Once user1 sent request to user2, then user2 shouldnt send connection back to user1
+  - user1 should not be able to send connection req to user1 more than 1
+  - we can use  $or: [{}] given by mongoDB to check whether user1->user2 connection already exists
+  - Check for user existence in DB,then only request can be made to user
+  - user1 should not be able to send connection to himself
+- Pre hook middleware with next()
+  - it will be called everytime connection is being saved
+  - thats the reason it named as pre
+  - Its not mandatory to write this at the schema level
+- Compound Indexes
+- Unique:true create automatically indexed in DB
+- unique: true or index: true, both we can do
+- we can do it in schema as, schema.index({fromuserid: 1})
+- 1 means increasing order and -1 is decreasing order, it will create index for all fromUserId
+
+- Read more info about Compound Indexing from documentation
+- Why should we not create unneccessarily indexes in DB?
