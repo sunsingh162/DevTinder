@@ -77,3 +77,6 @@
 - ref and populate
 - Create GET API for user/requests/recieved
 - Create GET API for user/connections
+- Create GET API for feed
+- use of select, comaparison operators like $and,$nin,$ne
+- Set page and limit in query

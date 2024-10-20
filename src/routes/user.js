@@ -66,15 +66,15 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     // 3) the profile which he has ignored
     // 4) the profile from which he has got the request
 
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    limit = limit > 50 ? 50 : limit;
+    const skip = (page - 1) * limit;
+
     const loggedInUser = req.user;
-    const allConnectionStatusOfLoggedInUser = await connectionReqModel
-      .find({
-        $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
-      })
-      .select("fromUserId")
-      .populate("fromUserId", "firstName lastName")
-      .select("toUserId")
-      .populate("toUserId", "firstName lastName");
+    const allConnectionStatusOfLoggedInUser = await connectionReqModel.find({
+      $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
+    });
     const hideuserProfile = new Set();
     allConnectionStatusOfLoggedInUser.map(
       (connection) => (
@@ -82,13 +82,17 @@ userRouter.get("/feed", userAuth, async (req, res) => {
         hideuserProfile.add(connection.toUserIdUserId)
       )
     );
-    const showUsersProfileInFeed = await userModel.find({
-      $and: [
-        { _id: { $nin: Array.from(hideuserProfile) } },
-        { _id: { $ne: loggedInUser._id } },
-      ],
-    });
-    res.send(showUsersProfileInFeed);
+    const showUsersProfileInFeed = await userModel
+      .find({
+        $and: [
+          { _id: { $nin: Array.from(hideuserProfile) } },
+          { _id: { $ne: loggedInUser._id } },
+        ],
+      })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
+    res.json({ message: "Fetched feed Users", data: showUsersProfileInFeed });
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
