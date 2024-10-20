@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
+      required: true,
       minLength: 8,
       maxLength: 100,
       validate(value) {
@@ -51,6 +52,10 @@ const userSchema = new mongoose.Schema(
           throw new Error("Gender data is not valid");
         }
       },
+      // enum: {
+      //   values: ["male","female","others"],
+      //   message: `{VALUE} is not valid gender type`
+      // }
     },
     photoUrl: {
       type: String,

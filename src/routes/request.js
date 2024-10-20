@@ -46,7 +46,43 @@ requestRouter.post(
         status,
       });
       const data = await connectionSentData.save();
-      res.json({ message: `${req.user.firstName} is ${status} in ${isUserPresent.firstName}`, data });
+      res.json({
+        message: `${req.user.firstName} is ${status} in ${isUserPresent.firstName}`,
+        data,
+      });
+    } catch (err) {
+      res.status(400).send("ERROR : " + err.message);
+    }
+  }
+);
+
+requestRouter.post(
+  "/request/review/:status/:requestId",
+  userAuth,
+  async (req, res) => {
+    try {
+      //if the connection send should be interested only
+      // status: accepted or rejected
+      // touserid = loggedinuser.requestid
+      const loggedInUser = req.user;
+      const { status, requestId } = req.params;
+      const allowedReviewStatus = ["accepted", "rejected"];
+      if (!allowedReviewStatus.includes(status)) {
+        return res.status(400).json({ message: "Invalid request" });
+      }
+      const connectionRequest = await connectionReqModel.findOne({
+        fromUserId: requestId,
+        status: "interested",
+        toUserId: loggedInUser._id,
+      });
+      if (!connectionRequest) {
+        return res
+          .status(400)
+          .json({ message: "Connection request not found" });
+      }
+      connectionRequest.status = status;
+      const data = await connectionRequest.save();
+      res.json({ message: `Connection ${status} successfully`, data });
     } catch (err) {
       res.status(400).send("ERROR : " + err.message);
     }

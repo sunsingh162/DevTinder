@@ -73,3 +73,7 @@
 
 - Read more info about Compound Indexing from documentation
 - Why should we not create unneccessarily indexes in DB?
+
+- ref and populate
+- Create GET API for user/requests/recieved
+- Create GET API for user/connections

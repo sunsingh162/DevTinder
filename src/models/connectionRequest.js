@@ -4,17 +4,19 @@ const connectionRequestSchema = new mongoose.Schema(
   {
     fromUserId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     toUserId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "User"
     },
     status: {
       type: String,
       required: true,
       enum: {
-        values: ["uninterested", "interested", "accepted", "rejected"],
+        values: ["interested", "uninterested", "accepted", "rejected"],
         message: `{VALUE} is incorrect status type`,
       },
     },
