@@ -60,7 +60,7 @@ const userSchema = new mongoose.Schema(
     photoUrl: {
       type: String,
       default:
-        "https://kristalle.com/team/david-and-audrey-lloyd/dummy-profile-pic/",
+        "https://geographyandyou.com/images/user-profile.png",
         validate(value) {
             if(!validator.isURL(value)){
                 throw new Error("Photo URL is not valid: " + value)
